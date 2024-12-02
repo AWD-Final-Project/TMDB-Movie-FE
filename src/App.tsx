@@ -7,30 +7,33 @@ import Navbar from "./components/Navbar";
 import Profile from "./pages/Profile";
 import { AuthProvider } from "./contexts/AuthContext";
 import Footer from "./components/Footer";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <div className="h-screen">
-          <Navbar />
-          <div className="pt-16 min-h-[calc(100vh-104px)]">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route
-                path="/profile"
-                element={
-                  <ProtectedRoute>
-                    <Profile />
-                  </ProtectedRoute>
-                }
-              />
-            </Routes>
+        <GoogleOAuthProvider clientId={import.meta.env.VITE_GG_CLIENT_ID}>
+          <div className="h-screen">
+            <Navbar />
+            <div className="pt-16 min-h-[calc(100vh-104px)]">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route
+                  path="/profile"
+                  element={
+                    <ProtectedRoute>
+                      <Profile />
+                    </ProtectedRoute>
+                  }
+                />
+              </Routes>
+            </div>
+            <Footer />
           </div>
-          <Footer />
-        </div>
+        </GoogleOAuthProvider>
       </AuthProvider>
     </BrowserRouter>
   );

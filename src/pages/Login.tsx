@@ -12,6 +12,7 @@ import {
 import { useAuth } from "../contexts/AuthContext";
 import axiosClient from "../configs/axios";
 import { ClipLoader } from "react-spinners";
+import { GoogleLogin } from "@react-oauth/google";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -30,6 +31,21 @@ const Login = () => {
     try {
       setLoading(true);
       const response = await axiosClient.post("/user/login", formData);
+      login(response.data.accessToken);
+      navigate("/");
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Invalid email or password");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async (credentials: any) => {
+    setError("");
+
+    try {
+      setLoading(true);
+      const response = await axiosClient.post("/user/google/auth", credentials);
       login(response.data.accessToken);
       navigate("/");
     } catch (err: any) {
@@ -86,11 +102,12 @@ const Login = () => {
           {loading ? <ClipLoader color="white" /> : "Login"}
         </Button>
       </form>
-      <Link href={import.meta.env.VITE_API_URL + "user/google/auth"}>
-        <Button variant="outlined" className="mt-4 h-10" fullWidth>
-          Log in with Google
-        </Button>
-      </Link>
+      <div className="mt-4">
+        <GoogleLogin
+          onSuccess={handleGoogleLogin}
+          onError={() => setError("Error logging in with Google")}
+        />
+      </div>
       {error && (
         <Alert severity="error" style={{ marginTop: "20px" }}>
           {error}
