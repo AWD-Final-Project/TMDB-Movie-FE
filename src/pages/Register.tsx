@@ -8,6 +8,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import axiosClient from "../configs/axios";
+import { ClipLoader } from "react-spinners";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -17,6 +18,7 @@ const Register = () => {
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e: any) => {
     setFormData({
@@ -37,17 +39,20 @@ const Register = () => {
     }
 
     try {
+      setLoading(true);
       const response = await axiosClient.post("/user/register", formData);
       setSuccess(response.data.message + ". Please login.");
     } catch (err: any) {
       setError(err.response?.data?.message || "Error registering user");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <Container maxWidth="sm">
-      <Typography variant="h4" align="center" gutterBottom>
-        Register
+    <Container maxWidth="sm" className="pt-16">
+      <Typography variant="h4" className="text-3xl" align="center" gutterBottom>
+        Register new account
       </Typography>
       <form onSubmit={handleSubmit}>
         <Box mb={2}>
@@ -85,8 +90,14 @@ const Register = () => {
             type="password"
           />
         </Box>
-        <Button type="submit" variant="contained" color="primary" fullWidth>
-          Register
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          className="h-10"
+          fullWidth
+        >
+          {loading ? <ClipLoader color="white" /> : "Register"}
         </Button>
       </form>
       {error && (

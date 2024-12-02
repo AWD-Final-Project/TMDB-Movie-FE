@@ -1,19 +1,20 @@
 import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import AppIcon from "../assets/app_icon.svg";
+import axiosClient from "../configs/axios";
 
 const Navbar = () => {
   const { isAuthenticated, logout } = useAuth();
-  const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
-    navigate("/login");
+    axiosClient.get("/user/logout");
   };
 
   return (
-    <AppBar>
-      <Toolbar>
+    <AppBar className="items-center bg-[#032541]">
+      <Toolbar className="max-w-[1200px] w-full ">
         <Typography
           variant="h6"
           component="div"
@@ -26,8 +27,9 @@ const Navbar = () => {
               color: "inherit",
               textDecoration: "none",
             }}
+            className="block w-fit"
           >
-            Home
+            <img src={AppIcon} alt="App Icon" width={140} />
           </Link>
         </Typography>
         <Box>
@@ -42,18 +44,22 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <Button color="inherit" component={Link} to="/login">
+              <Button
+                color="inherit"
+                component={Link}
+                to="/login"
+                className="normal-case"
+              >
                 Login
               </Button>
-              <Button color="inherit" component={Link} to="/register">
+              <Button
+                color="inherit"
+                component={Link}
+                to="/register"
+                className="normal-case"
+              >
                 Register
               </Button>
-              <a
-                href="https://awap-tmdb-movie-be.onrender.com/user/google/auth"
-                target="self"
-              >
-                google
-              </a>
             </>
           )}
         </Box>

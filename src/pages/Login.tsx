@@ -7,9 +7,11 @@ import {
   Typography,
   Box,
   Alert,
+  Link,
 } from "@mui/material";
 import { useAuth } from "../contexts/AuthContext";
 import axiosClient from "../configs/axios";
+import { ClipLoader } from "react-spinners";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -19,17 +21,21 @@ const Login = () => {
   const [error, setError] = useState("");
   const { login } = useAuth();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e: any) => {
     e.preventDefault();
     setError("");
 
     try {
+      setLoading(true);
       const response = await axiosClient.post("/user/login", formData);
       login(response.data.accessToken);
       navigate("/");
     } catch (err: any) {
       setError(err.response?.data?.message || "Invalid email or password");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -41,9 +47,9 @@ const Login = () => {
   };
 
   return (
-    <Container maxWidth="sm">
-      <Typography variant="h4" align="center" gutterBottom>
-        Login
+    <Container maxWidth="sm" className="pt-16">
+      <Typography variant="h4" className="text-3xl" align="center" gutterBottom>
+        Login to your account
       </Typography>
       <form onSubmit={handleLogin}>
         <Box mb={2}>
@@ -70,11 +76,21 @@ const Login = () => {
             type="password"
           />
         </Box>
-        <Button type="submit" variant="contained" color="primary" fullWidth>
-          Login
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          className="h-10"
+          fullWidth
+        >
+          {loading ? <ClipLoader color="white" /> : "Login"}
         </Button>
       </form>
-
+      <Link href={import.meta.env.VITE_API_URL + "user/google/auth"}>
+        <Button variant="outlined" className="mt-4 h-10" fullWidth>
+          Log in with Google
+        </Button>
+      </Link>
       {error && (
         <Alert severity="error" style={{ marginTop: "20px" }}>
           {error}

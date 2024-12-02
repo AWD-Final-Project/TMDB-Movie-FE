@@ -6,6 +6,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
 import Profile from "./pages/Profile";
 import { AuthProvider } from "./contexts/AuthContext";
+import Footer from "./components/Footer";
 
 function App() {
   return (
@@ -13,16 +14,9 @@ function App() {
       <AuthProvider>
         <div className="h-screen">
           <Navbar />
-          <div className="mt-32">
+          <div className="pt-16 min-h-[calc(100vh-104px)]">
             <Routes>
-              <Route
-                path="/"
-                element={
-                  <ProtectedRoute>
-                    <Home />
-                  </ProtectedRoute>
-                }
-              />
+              <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route
@@ -35,6 +29,7 @@ function App() {
               />
             </Routes>
           </div>
+          <Footer />
         </div>
       </AuthProvider>
     </BrowserRouter>
