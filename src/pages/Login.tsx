@@ -44,7 +44,9 @@ const Login = () => {
 
     try {
       setLoading(true);
-      const response = await axiosClient.post("/user/google/auth", credentials);
+      const response = await axiosClient.post("/user/google/verify", {
+        idToken: credentials.credential,
+      });
       login(response.data.accessToken);
       navigate("/");
     } catch (err: any) {
