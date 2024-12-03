@@ -47,7 +47,7 @@ const Login = () => {
       const response = await axiosClient.post("/user/google/verify", {
         idToken: credentials.credential,
       });
-      login(response.data.accessToken);
+      login(response.data.data.accessToken);
       navigate("/");
     } catch (err: any) {
       setError(err.response?.data?.message || "Invalid email or password");
