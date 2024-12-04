@@ -14,6 +14,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // On login, store token and update state
   const login = (newToken: string) => {
+    console.log(newToken);
     localStorage.setItem("token", newToken);
     setToken(newToken);
     setIsAuthenticated(true);

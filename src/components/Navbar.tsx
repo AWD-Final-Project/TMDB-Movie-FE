@@ -7,9 +7,9 @@ import axiosClient from "../configs/axios";
 const Navbar = () => {
   const { isAuthenticated, logout } = useAuth();
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await axiosClient.get("/user/logout");
     logout();
-    axiosClient.get("/user/logout");
   };
 
   return (
