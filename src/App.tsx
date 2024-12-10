@@ -8,6 +8,8 @@ import Profile from "./pages/Profile";
 import { AuthProvider } from "./contexts/AuthContext";
 import Footer from "./components/Footer";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import Detail from "./pages/Detail";
+import Search from "./pages/Search";
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/movie/:id" element={<Detail />} />
+                <Route path="/search" element={<Search />} />
                 <Route
                   path="/profile"
                   element={
