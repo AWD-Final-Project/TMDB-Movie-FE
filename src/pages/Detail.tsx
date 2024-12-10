@@ -78,7 +78,7 @@ const Detail = () => {
         <div
           style={{
             filter: "blur(2px)",
-            backgroundImage: `url(https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces${movie?.backdrop_path})`,
+            backgroundImage: `url(https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces/3V4kLQg0kSqPLctI5ziYWabAZYF.jpg)`,
           }}
           className={classNames("h-[600px] ")}
         ></div>
