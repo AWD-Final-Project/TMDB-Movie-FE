@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import axiosClient from "../configs/axios";
 import { IMovie } from "./Detail";
 import { Container } from "@mui/material";
+import classNames from "classnames";
 
 const Search = () => {
   const navigate = useNavigate();
@@ -10,12 +11,13 @@ const Search = () => {
   const query = searchParams.get("query");
   const [movies, setMovies] = useState<IMovie[]>([]);
   const [searchQuery, setSearchQuery] = useState(query || "");
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
     const searchMovie = async () => {
       try {
         const response = await axiosClient.get(
-          `/movie/search?key_word=${query}`
+          `/movie/search?key_word=${query}&page=${page}`
         );
         const data = await response.data;
         setMovies(data.data);
@@ -25,7 +27,7 @@ const Search = () => {
     };
 
     searchMovie();
-  }, [query]);
+  }, [query, page]);
 
   return (
     <div>
@@ -69,6 +71,33 @@ const Search = () => {
               </div>
             </div>
           ))}
+        </div>
+        <div className="flex justify-center gap-4 mt-4">
+          <button
+            className={classNames({ hidden: page === 1 })}
+            onClick={() => setPage(page - 1)}
+          >
+            Previous
+          </button>
+
+          {[page - 2, page - 1, page, page + 1, page + 2].map((p) => {
+            if (p > 0)
+              return (
+                <button
+                  key={p}
+                  className={`${
+                    page === p ? "bg-gray-300 rounded w-6 h-6" : ""
+                  }`}
+                  onClick={() => setPage(p)}
+                >
+                  {p}
+                </button>
+              );
+          })}
+
+          <button className="" onClick={() => setPage(page + 1)}>
+            Next
+          </button>
         </div>
       </Container>
     </div>
