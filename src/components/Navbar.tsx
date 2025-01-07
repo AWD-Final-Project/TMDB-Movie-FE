@@ -3,17 +3,25 @@ import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import AppIcon from "../assets/app_icon.svg";
 import axiosClient from "../configs/axios";
+import { RiChatAiLine } from "react-icons/ri";
+import { useApp } from "../contexts/AppContext";
+import classNames from "classnames";
 
 const Navbar = () => {
   const { isAuthenticated, logout } = useAuth();
+  const { setIsOpenAIChat, isOpenAIChat } = useApp();
 
   const handleLogout = async () => {
-    await axiosClient.get("/user/logout");
+    axiosClient.get("/user/logout");
     logout();
   };
 
   return (
-    <AppBar className="items-center bg-[#032541]">
+    <AppBar
+      className={classNames("items-center bg-[#032541]", {
+        "w-[calc(100%-400px)] left-0": isOpenAIChat,
+      })}
+    >
       <Toolbar className="max-w-[1200px] w-full ">
         <Typography
           variant="h6"
@@ -33,6 +41,10 @@ const Navbar = () => {
           </Link>
         </Typography>
         <Box>
+          <Button
+            endIcon={<RiChatAiLine />}
+            onClick={() => setIsOpenAIChat((prev) => !prev)}
+          ></Button>
           {isAuthenticated ? (
             <>
               <Button color="inherit" component={Link} to="/profile">

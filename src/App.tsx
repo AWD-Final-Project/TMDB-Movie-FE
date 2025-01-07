@@ -10,33 +10,54 @@ import Footer from "./components/Footer";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Detail from "./pages/Detail";
 import Search from "./pages/Search";
+import { AppContext, AppProvider } from "./contexts/AppContext";
+import AIChat from "./components/AIChat";
 
 function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
         <GoogleOAuthProvider clientId={import.meta.env.VITE_GG_CLIENT_ID}>
-          <div className="h-screen">
-            <Navbar />
-            <div className="pt-16 min-h-[calc(100vh-104px)]">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/movie/:id" element={<Detail />} />
-                <Route path="/search" element={<Search />} />
-                <Route
-                  path="/profile"
-                  element={
-                    <ProtectedRoute>
-                      <Profile />
-                    </ProtectedRoute>
-                  }
-                />
-              </Routes>
-            </div>
-            <Footer />
-          </div>
+          <AppProvider>
+            <AppContext.Consumer>
+              {({ isOpenAIChat }) => (
+                <div className="flex">
+                  <div
+                    className={
+                      isOpenAIChat
+                        ? "h-screen w-[calc(100%-400px)]"
+                        : "h-screen w-full"
+                    }
+                  >
+                    <Navbar />
+                    <div className="pt-16 min-h-[calc(100vh-104px)]">
+                      <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                        <Route path="/movie/:id" element={<Detail />} />
+                        <Route path="/search" element={<Search />} />
+                        <Route
+                          path="/profile"
+                          element={
+                            <ProtectedRoute>
+                              <Profile />
+                            </ProtectedRoute>
+                          }
+                        />
+                      </Routes>
+                    </div>
+                    <Footer />
+                  </div>
+                  {isOpenAIChat && (
+                    <div className="w-[400px]">
+                      <AIChat />
+                    </div>
+                  )}
+                </div>
+              )}
+            </AppContext.Consumer>
+          </AppProvider>
         </GoogleOAuthProvider>
       </AuthProvider>
     </BrowserRouter>

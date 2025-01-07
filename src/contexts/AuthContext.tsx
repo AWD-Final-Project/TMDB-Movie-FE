@@ -3,7 +3,13 @@ import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext({
   isAuthenticated: false,
-  login: (_token: string) => {},
+  login: ({
+    accessToken,
+    refreshToken,
+  }: {
+    accessToken: string;
+    refreshToken: string;
+  }) => {},
   logout: () => {},
 });
 
@@ -13,10 +19,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const navigate = useNavigate();
 
   // On login, store token and update state
-  const login = (newToken: string) => {
-    console.log(newToken);
-    localStorage.setItem("token", newToken);
-    setToken(newToken);
+  const login = ({
+    accessToken,
+    refreshToken,
+  }: {
+    accessToken: string;
+    refreshToken: string;
+  }) => {
+    localStorage.setItem("token", accessToken);
+    localStorage.setItem("refreshToken", refreshToken);
+    setToken(accessToken);
     setIsAuthenticated(true);
   };
 

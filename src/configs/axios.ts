@@ -19,4 +19,26 @@ axiosClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+axiosClient.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    if (error.response.status === 401) {
+      const refreshToken = localStorage.getItem("refreshToken");
+      if (refreshToken) {
+        const newToken = await axios.post(
+          `${import.meta.env.VITE_API_URL}/user/invoke-new-tokens`,
+          { refreshToken }
+        );
+
+        localStorage.setItem("token", newToken.data.accessToken);
+        localStorage.setItem("refreshToken", newToken.data.refreshToken);
+
+        return axiosClient.request(error.config);
+      }
+    } else {
+      return Promise.reject(error);
+    }
+  }
+);
+
 export default axiosClient;
