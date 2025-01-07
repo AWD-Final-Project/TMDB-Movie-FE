@@ -43,7 +43,7 @@ function AIChat() {
     setLoading(false);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     if (input.trim() !== "") {
       sendMessage(input);

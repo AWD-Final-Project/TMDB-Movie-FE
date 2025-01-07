@@ -43,7 +43,7 @@ const Navbar = () => {
         <Box>
           <Button
             endIcon={<RiChatAiLine />}
-            onClick={() => setIsOpenAIChat((prev) => !prev)}
+            onClick={() => setIsOpenAIChat(!isOpenAIChat)}
           ></Button>
           {isAuthenticated ? (
             <>

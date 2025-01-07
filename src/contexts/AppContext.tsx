@@ -2,7 +2,9 @@ import React, { createContext, useState } from "react";
 
 export const AppContext = createContext({
   isOpenAIChat: false,
-  setIsOpenAIChat: (isOpenAIChat: boolean) => {},
+  setIsOpenAIChat: (isOpenAIChat: boolean) => {
+    console.log(isOpenAIChat);
+  },
 });
 
 export const AppProvider = ({ children }: { children: React.ReactNode }) => {

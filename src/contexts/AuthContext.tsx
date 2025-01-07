@@ -9,7 +9,9 @@ export const AuthContext = createContext({
   }: {
     accessToken: string;
     refreshToken: string;
-  }) => {},
+  }) => {
+    console.log(accessToken, refreshToken);
+  },
   logout: () => {},
 });
 
