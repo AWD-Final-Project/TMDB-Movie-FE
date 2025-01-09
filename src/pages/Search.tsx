@@ -144,7 +144,12 @@ const Search = () => {
                   Previous
                 </button>
 
-                {[page - 2, page - 1, page, page + 1, page + 2].map((p) => {
+                {[
+                  page - 2,
+                  page - 1,
+                  page,
+                  ...(movies.length > 10 ? [page + 1, page + 2] : []),
+                ].map((p) => {
                   if (p > 0)
                     return (
                       <button
@@ -159,7 +164,10 @@ const Search = () => {
                     );
                 })}
 
-                <button className="" onClick={() => setPage(page + 1)}>
+                <button
+                  className={classNames({ hidden: movies.length < 10 })}
+                  onClick={() => setPage(page + 1)}
+                >
                   Next
                 </button>
               </div>
