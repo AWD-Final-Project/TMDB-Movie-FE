@@ -97,10 +97,15 @@ const Profile = () => {
     }
   };
 
-  if (loading) return <CircularProgress />;
+  if (loading)
+    return (
+      <div className="flex items-center justify-center">
+        <CircularProgress />;
+      </div>
+    );
 
   return (
-    <Container maxWidth="sm">
+    <Container>
       <Box mt={5}>
         <Typography variant="h4" gutterBottom>
           Profile
