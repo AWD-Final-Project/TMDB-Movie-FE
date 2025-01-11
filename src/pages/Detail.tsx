@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axiosClient from "../configs/axios";
-import { Container } from "@mui/material";
+import { Container, Divider } from "@mui/material";
 import classNames from "classnames";
 import { IMovie } from "../interfaces/video";
 import { FaEye, FaHeart, FaRegStar, FaStar } from "react-icons/fa";
@@ -9,6 +9,7 @@ import { Tooltip } from "react-tooltip";
 import { SyncLoader } from "react-spinners";
 import { useAuth } from "../contexts/AuthContext";
 import CastList from "../components/detail/CastList";
+import ReviewList from "../components/detail/ReviewList";
 
 const Detail = () => {
   const { id } = useParams();
@@ -114,7 +115,7 @@ const Detail = () => {
         }}
         className={classNames("h-[530px] ")}
       ></div>
-      <div className="absolute top-0 left-0 right-0 bottom-0">
+      <div className="absolute top-0 left-0 right-0">
         <Container className="py-10">
           <div className="text-white flex gap-10">
             <img
@@ -206,6 +207,11 @@ const Detail = () => {
         </Container>
       </div>
       <CastList movie={movie} />
+      <Container>
+        <Divider />
+        <ReviewList reviews={movie?.reviews} movie_id={id as string} />
+        <Divider />
+      </Container>
     </div>
   );
 };

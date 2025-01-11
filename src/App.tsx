@@ -12,6 +12,9 @@ import Detail from "./pages/Detail";
 import Search from "./pages/Search";
 import { AppContext, AppProvider } from "./contexts/AppContext";
 import AIChat from "./components/share/AIChat";
+import CastPage from "./pages/CastPage";
+import ReviewPage from "./pages/ReviewPage";
+import CastDetail from "./pages/CastDetail";
 
 function App() {
   return (
@@ -36,6 +39,12 @@ function App() {
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
                         <Route path="/movie/:id" element={<Detail />} />
+                        <Route path="/movie/:id/cast" element={<CastPage />} />
+                        <Route
+                          path="/movie/:id/reviews"
+                          element={<ReviewPage />}
+                        />
+                        <Route path="/person/:id" element={<CastDetail />} />
                         <Route path="/search" element={<Search />} />
                         <Route
                           path="/profile"

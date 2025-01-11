@@ -18,6 +18,11 @@ export interface IMovie {
   tmdb_id: string;
   is_favorite: boolean;
   is_watchlist: boolean;
+  reviews: IReview[];
+  credits: {
+    cast: ICast[];
+    crew: ICrew[];
+  };
   origin_country: string[];
   original_language: string;
   original_title: string;
@@ -48,4 +53,32 @@ export interface IMovie {
   video: boolean;
   vote_average: number;
   vote_count: number;
+}
+
+export interface IReview {
+  _id: string;
+  user_id: string;
+  movie_id: string;
+  content: string;
+  rating: number;
+  created_at: string;
+  updated_at: string;
+  author_details: {
+    avatar_path: string;
+  };
+  author: string;
+}
+
+export interface ICast {
+  id: number;
+  name: string;
+  character: string;
+  profile_path: string;
+}
+
+export interface ICrew {
+  id: number;
+  name: string;
+  job: string;
+  profile_path: string;
 }
