@@ -2,16 +2,16 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import ProtectedRoute from "./components/ProtectedRoute";
-import Navbar from "./components/Navbar";
+import ProtectedRoute from "./components/share/ProtectedRoute";
+import Navbar from "./components/share/Navbar";
 import Profile from "./pages/Profile";
 import { AuthProvider } from "./contexts/AuthContext";
-import Footer from "./components/Footer";
+import Footer from "./components/share/Footer";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import Detail from "./pages/Detail";
 import Search from "./pages/Search";
 import { AppContext, AppProvider } from "./contexts/AppContext";
-import AIChat from "./components/AIChat";
+import AIChat from "./components/share/AIChat";
 
 function App() {
   return (

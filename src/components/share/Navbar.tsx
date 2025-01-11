@@ -1,10 +1,10 @@
 import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material";
 import { Link } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext";
-import AppIcon from "../assets/app_icon.svg";
-import axiosClient from "../configs/axios";
+import { useAuth } from "../../contexts/AuthContext";
+import AppIcon from "../../assets/app_icon.svg";
+import axiosClient from "../../configs/axios";
 import { RiChatAiLine } from "react-icons/ri";
-import { useApp } from "../contexts/AppContext";
+import { useApp } from "../../contexts/AppContext";
 import classNames from "classnames";
 
 const Navbar = () => {

@@ -5,6 +5,8 @@ import { IMovie } from "./Detail";
 import { useNavigate } from "react-router-dom";
 import classNames from "classnames";
 import { SyncLoader } from "react-spinners";
+import LatestTrailer from "../components/home/LatestTrailer";
+import PopularMovie from "../components/home/PopularMovie";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -152,6 +154,8 @@ const Home = () => {
           </div>
         </Container>
       </div>
+      <LatestTrailer />
+      <PopularMovie />
     </div>
   );
 };

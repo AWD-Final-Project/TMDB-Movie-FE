@@ -1,0 +1,67 @@
+import { Container, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { SyncLoader } from "react-spinners";
+import { IMovie } from "../../pages/Detail";
+import axiosClient from "../../configs/axios";
+
+const LatestTrailer = () => {
+  const [movies, setMovies] = useState<IMovie[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchPopularMovies = async () => {
+    try {
+      setLoading(true);
+      const response = await axiosClient.get("/movie/popular/");
+      const data = await response.data;
+      setMovies(data.data);
+    } catch (error) {
+      console.error("Failed to fetch movies:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPopularMovies();
+  }, []);
+
+  return (
+    <div className="text-white object-cover bg-[url(https://4kwallpapers.com/images/walls/thumbs_3t/18419.jpeg)]">
+      <Container className="pt-8">
+        <div className="flex gap-4">
+          <Typography variant="h5">Latest Trailers</Typography>
+        </div>
+        <div className="flex gap-5 mb-4 overflow-x-auto">
+          {loading ? (
+            <div className="flex items-center justify-center w-full h-[350px]">
+              <SyncLoader color="#1ed5a9" />
+            </div>
+          ) : (
+            movies.map((movie) => (
+              <div
+                key={movie.id}
+                className="flex items-center my-4 flex-col w-40 cursor-pointer"
+              >
+                <img
+                  src={`https://image.tmdb.org/t/p/w300_and_h450_multi_faces${movie?.poster_path}`}
+                  alt={movie.title}
+                  className="w-[300px]  object-cover rounded-md"
+                />
+                <div className="ml-3 w-full relative">
+                  <div className="w-9 h-9 absolute top-[-18px] rounded-full bg-black border-[3px] border-[#1ed5a9] text-white flex items-center justify-center">
+                    {Math.round(movie.vote_average * 10)}
+                  </div>
+                  <Typography className="text-ellipsis text-nowrap overflow-hidden mt-5 w-40">
+                    {movie.title}
+                  </Typography>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      </Container>
+    </div>
+  );
+};
+
+export default LatestTrailer;
