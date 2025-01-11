@@ -1,9 +1,9 @@
 import { Container, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { IMovie } from "../../pages/Detail";
 import axiosClient from "../../configs/axios";
 import { SyncLoader } from "react-spinners";
+import { IMovie } from "../../interfaces/video";
 
 const PopularMovie = () => {
   const navigate = useNavigate();
@@ -43,7 +43,7 @@ const PopularMovie = () => {
               <div
                 key={movie.id}
                 className="flex items-center my-4 flex-col w-40 cursor-pointer"
-                onClick={() => navigate(`/movie/${movie.id}`)}
+                onClick={() => navigate(`/movie/${movie._id}`)}
               >
                 <img
                   src={`https://image.tmdb.org/t/p/w300_and_h450_multi_faces${movie?.poster_path}`}

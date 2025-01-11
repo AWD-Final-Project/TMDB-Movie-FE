@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import axiosClient from "../configs/axios";
-import { IMovie } from "./Detail";
 import { Container, MenuItem, Select } from "@mui/material";
 import classNames from "classnames";
 import { SyncLoader } from "react-spinners";
+import { IMovie } from "../interfaces/video";
 
 const Search = () => {
   const navigate = useNavigate();

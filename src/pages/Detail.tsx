@@ -3,85 +3,105 @@ import { useParams } from "react-router-dom";
 import axiosClient from "../configs/axios";
 import { Container } from "@mui/material";
 import classNames from "classnames";
-
-export interface IMovie {
-  adult: boolean;
-  backdrop_path: string;
-  belongs_to_collection: {
-    id: number;
-    name: string;
-    poster_path: string;
-    backdrop_path: string;
-  };
-  budget: number;
-  genres: {
-    id: number;
-    name: string;
-  }[];
-  homepage: string;
-  id: number;
-  imdb_id: string;
-  origin_country: string[];
-  original_language: string;
-  original_title: string;
-  overview: string;
-  popularity: number;
-  poster_path: string;
-  production_companies: {
-    id: number;
-    logo_path: string;
-    name: string;
-    origin_country: string;
-  }[];
-  production_countries: {
-    iso_3166_1: string;
-    name: string;
-  }[];
-  release_date: string;
-  revenue: number;
-  runtime: number;
-  spoken_languages: {
-    english_name: string;
-    iso_639_1: string;
-    name: string;
-  }[];
-  status: string;
-  tagline: string;
-  title: string;
-  video: boolean;
-  vote_average: number;
-  vote_count: number;
-}
+import { IMovie } from "../interfaces/video";
+import { FaEye, FaHeart, FaRegStar, FaStar } from "react-icons/fa";
+import { Tooltip } from "react-tooltip";
+import { SyncLoader } from "react-spinners";
+import { useAuth } from "../contexts/AuthContext";
+import CastList from "../components/detail/CastList";
 
 const Detail = () => {
   const { id } = useParams();
-  const [movie, setMovie] = useState<IMovie | null>(null);
+  const [movie, setMovie] = useState<IMovie>();
+  const [isRating, setIsRating] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     const fetchMovieDetail = async () => {
       try {
+        setIsLoading(true);
         const response = await axiosClient.get(`/movie/${id}`);
 
         const data = await response.data;
         setMovie(data.data);
       } catch (error) {
         console.error("Failed to fetch movie detail:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     fetchMovieDetail();
   }, [id]);
 
+  const rateMovie = async (rate: number) => {
+    try {
+      await axiosClient.post(`/user/vote-rating`, {
+        value: rate,
+        movieId: id,
+      });
+    } catch (error) {
+      console.error("Failed to rate movie:", error);
+    } finally {
+      setIsRating(false);
+    }
+  };
+
+  const switchFavorite = async () => {
+    try {
+      if (movie?.is_favorite) {
+        await axiosClient.delete(`/user/remove-from-favorite`, {
+          data: { movieId: id },
+        });
+        setMovie((prev) => prev && { ...prev, is_favorite: false });
+      } else {
+        await axiosClient.post(`/user/add-to-favorite`, {
+          movieId: id,
+        });
+        setMovie((prev) => prev && { ...prev, is_favorite: true });
+      }
+    } catch (error) {
+      console.error("Failed to switch favorite:", error);
+    }
+  };
+
+  const switchWatchlist = async () => {
+    try {
+      if (movie?.is_watchlist) {
+        await axiosClient.delete(`/user/remove-from-watchlist`, {
+          data: { movieId: id },
+        });
+        setMovie((prev) => prev && { ...prev, is_watchlist: false });
+      } else {
+        await axiosClient.post(`/user/add-to-watchlist`, {
+          movieId: id,
+        });
+        setMovie((prev) => prev && { ...prev, is_watchlist: true });
+      }
+    } catch (error) {
+      console.error("Failed to switch watchlist:", error);
+    }
+  };
+
   if (!movie)
-    return (
+    return isLoading ? (
       <div className="relative">
         <div
-          style={{
-            filter: "blur(2px)",
-            backgroundImage: `url(https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces/3V4kLQg0kSqPLctI5ziYWabAZYF.jpg)`,
-          }}
-          className={classNames("h-[600px] ")}
-        ></div>
+          className={classNames("h-[600px] flex items-center justify-center")}
+        >
+          <SyncLoader color="#1ed5a9" />
+        </div>
+      </div>
+    ) : (
+      <div className="relative">
+        <div
+          className={classNames("h-[600px] flex items-center justify-center")}
+        >
+          <p>Movie not found</p>
+        </div>
       </div>
     );
 
@@ -89,10 +109,10 @@ const Detail = () => {
     <div className="relative">
       <div
         style={{
-          filter: "blur(2px)",
+          filter: "blur(1px)",
           backgroundImage: `url(https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces${movie?.backdrop_path})`,
         }}
-        className={classNames("h-[600px] ")}
+        className={classNames("h-[530px] ")}
       ></div>
       <div className="absolute top-0 left-0 right-0 bottom-0">
         <Container className="py-10">
@@ -111,7 +131,7 @@ const Detail = () => {
               </div>
               <div className="mt-5 flex items-center gap-2">
                 <div className="w-12 h-12 rounded-full bg-black border-[3px] border-[#1ed5a9] text-white flex items-center justify-center text-lg">
-                  {Number(movie?.vote_average) * 10}
+                  {Math.floor(Number(movie?.vote_average) * 10)}
                   <sup className="text-[8px]">%</sup>
                 </div>
                 <span>
@@ -119,6 +139,62 @@ const Detail = () => {
                   <br />
                   Score
                 </span>
+                {isAuthenticated && (
+                  <div className="ml-4 flex gap-4">
+                    <div
+                      data-tooltip-id="favorite"
+                      className="w-10 h-10 rounded-full cursor-pointer bg-black flex items-center justify-center relative"
+                      onClick={() => switchFavorite()}
+                    >
+                      <FaHeart
+                        size={14}
+                        color={movie?.is_favorite ? "red" : ""}
+                      />
+                      <Tooltip id="favorite">Mark as favorite</Tooltip>
+                    </div>
+                    <div
+                      data-tooltip-id="watchlist"
+                      className="w-10 h-10 rounded-full cursor-pointer bg-black flex items-center justify-center relative"
+                      onClick={() => switchWatchlist()}
+                    >
+                      <FaEye
+                        size={14}
+                        color={movie?.is_watchlist ? "red" : ""}
+                      />
+                      <Tooltip id="watchlist">Add to watchlist</Tooltip>
+                    </div>
+                    <div
+                      data-tooltip-id="rating"
+                      className="w-10 h-10 rounded-full cursor-pointer bg-black flex items-center justify-center relative"
+                      onClick={() => setIsRating(!isRating)}
+                    >
+                      <FaStar size={14} />
+                      <Tooltip id="rating">{!isRating && "Rate it!"}</Tooltip>
+                      {isRating && (
+                        <>
+                          <div className="absolute border-[10px] border-b-black top-10 border-transparent"></div>
+                          <div className="absolute flex top-14 bg-black p-3  rounded-lg">
+                            {[1, 2, 3, 4, 5].map((item) => (
+                              <div
+                                key={item}
+                                onMouseEnter={() => setRating(item)}
+                                onMouseLeave={() => setRating(0)}
+                                onClick={() => rateMovie(item)}
+                                className="cursor-pointer px-[2px]"
+                              >
+                                {item <= rating ? (
+                                  <FaStar size={24} color="yellow" />
+                                ) : (
+                                  <FaRegStar size={24} />
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="mt-6 flex flex-col">
                 <span className="text-gray-300 italic">{movie?.tagline}</span>
@@ -129,6 +205,7 @@ const Detail = () => {
           </div>
         </Container>
       </div>
+      <CastList movie={movie} />
     </div>
   );
 };

@@ -1,8 +1,8 @@
 import { Container, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { SyncLoader } from "react-spinners";
-import { IMovie } from "../../pages/Detail";
 import axiosClient from "../../configs/axios";
+import { IMovie } from "../../interfaces/video";
 
 const LatestTrailer = () => {
   const [movies, setMovies] = useState<IMovie[]>([]);
