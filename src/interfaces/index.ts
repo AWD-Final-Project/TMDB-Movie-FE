@@ -75,6 +75,11 @@ export interface ICast {
   character: string;
   profile_path: string;
   credit_id: string;
+  birthday: string;
+  biography: string;
+  movie_credits: {
+    cast: ICast[];
+  };
 }
 
 export interface ICrew {

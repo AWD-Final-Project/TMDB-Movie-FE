@@ -51,7 +51,7 @@ function AIChat() {
   };
 
   return (
-    <div className="AIChat bg-white p-4 shadow-lg rounded-lg h-full">
+    <div className="AIChat bg-white p-4 shadow-lg rounded-lg h-full fixed w-[400px]">
       <div className="flex flex-col h-full">
         <div className="flex-1 overflow-auto space-y-4">
           {/* Display chat messages */}
