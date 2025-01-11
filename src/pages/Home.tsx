@@ -6,7 +6,7 @@ import classNames from "classnames";
 import { SyncLoader } from "react-spinners";
 import LatestTrailer from "../components/home/LatestTrailer";
 import PopularMovie from "../components/home/PopularMovie";
-import { IMovie } from "../interfaces/video";
+import { IMovie } from "../interfaces";
 
 const Home = () => {
   const navigate = useNavigate();

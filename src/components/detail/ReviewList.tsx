@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { IReview } from "../../interfaces/video";
+import { IReview } from "../../interfaces";
 
 const ReviewList = ({
   reviews,

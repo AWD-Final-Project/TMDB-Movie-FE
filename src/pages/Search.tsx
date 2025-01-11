@@ -4,7 +4,7 @@ import axiosClient from "../configs/axios";
 import { Container, MenuItem, Select } from "@mui/material";
 import classNames from "classnames";
 import { SyncLoader } from "react-spinners";
-import { IMovie } from "../interfaces/video";
+import { IMovie } from "../interfaces";
 
 const Search = () => {
   const navigate = useNavigate();

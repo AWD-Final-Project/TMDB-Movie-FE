@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axiosClient from "../../configs/axios";
 import { SyncLoader } from "react-spinners";
-import { IMovie } from "../../interfaces/video";
+import { IMovie } from "../../interfaces";
 
 const PopularMovie = () => {
   const navigate = useNavigate();

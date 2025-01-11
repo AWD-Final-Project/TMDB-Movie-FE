@@ -7,10 +7,14 @@ import {
   Modal,
   Button,
   TextField,
+  Divider,
 } from "@mui/material";
 import axiosClient from "../configs/axios";
 import { ClipLoader } from "react-spinners";
 import { useNavigate } from "react-router-dom";
+import FavoriteList from "../components/profile/FavoriteList";
+import WatchList from "../components/profile/WatchList";
+import RatingList from "../components/profile/RatingList";
 
 const style = {
   position: "absolute",
@@ -105,9 +109,6 @@ const Profile = () => {
           <div>
             <Typography variant="h6">Email: {profile.email}</Typography>
             <Typography variant="h6">Username: {profile.username}</Typography>
-            <Typography variant="h6">Fullname: {profile.fullname}</Typography>
-            <Typography variant="h6">Address: {profile.address}</Typography>
-
             <Modal
               open={isResetModalOpen}
               onClose={() => setResetModal(false)}
@@ -217,6 +218,12 @@ const Profile = () => {
             >
               Reset password
             </Button>
+            <Divider className="mt-4" />
+            <FavoriteList />
+            <Divider />
+            <WatchList />
+            <Divider />
+            <RatingList />
           </div>
         ) : (
           <Typography color="error">Failed to load profile.</Typography>

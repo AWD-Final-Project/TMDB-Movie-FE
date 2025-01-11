@@ -74,6 +74,7 @@ export interface ICast {
   name: string;
   character: string;
   profile_path: string;
+  credit_id: string;
 }
 
 export interface ICrew {

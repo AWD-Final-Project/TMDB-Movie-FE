@@ -1,17 +1,19 @@
-import { Container, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { SyncLoader } from "react-spinners";
-import axiosClient from "../../configs/axios";
+import { useNavigate } from "react-router-dom";
 import { IMovie } from "../../interfaces";
+import axiosClient from "../../configs/axios";
+import { Container, Typography } from "@mui/material";
+import { SyncLoader } from "react-spinners";
 
-const LatestTrailer = () => {
+const WatchList = () => {
+  const navigate = useNavigate();
   const [movies, setMovies] = useState<IMovie[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchPopularMovies = async () => {
+  const fetchFavoriteMovies = async () => {
     try {
       setLoading(true);
-      const response = await axiosClient.get("/movie/popular/");
+      const response = await axiosClient.get("/user/watchlist-movies");
       const data = await response.data;
       setMovies(data.data);
     } catch (error) {
@@ -22,25 +24,26 @@ const LatestTrailer = () => {
   };
 
   useEffect(() => {
-    fetchPopularMovies();
+    fetchFavoriteMovies();
   }, []);
 
   return (
-    <div className="text-white object-cover bg-[url(https://4kwallpapers.com/images/walls/thumbs_3t/18419.jpeg)]">
-      <Container className="pt-8">
-        <div className="flex gap-4">
-          <Typography variant="h5">Latest Trailers</Typography>
-        </div>
+    <div>
+      <Container className="p-0">
+        <Typography variant="h6">Watchlist Movies</Typography>
         <div className="flex gap-5 mb-4 overflow-x-auto">
           {loading ? (
             <div className="flex items-center justify-center w-full h-[350px]">
               <SyncLoader color="#1ed5a9" />
             </div>
+          ) : movies.length === 0 ? (
+            <p className="pb-2">No movies in watchlist</p>
           ) : (
             movies.map((movie) => (
               <div
                 key={movie.id}
                 className="flex items-center my-4 flex-col w-40 cursor-pointer"
+                onClick={() => navigate(`/movie/${movie._id}`)}
               >
                 <img
                   src={`https://image.tmdb.org/t/p/w300_and_h450_multi_faces${movie?.poster_path}`}
@@ -54,6 +57,9 @@ const LatestTrailer = () => {
                   <Typography className="text-ellipsis text-nowrap overflow-hidden mt-5 w-40">
                     {movie.title}
                   </Typography>
+                  <Typography variant="body1" color="textSecondary">
+                    {movie.release_date}
+                  </Typography>
                 </div>
               </div>
             ))
@@ -64,4 +70,4 @@ const LatestTrailer = () => {
   );
 };
 
-export default LatestTrailer;
+export default WatchList;

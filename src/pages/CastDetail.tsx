@@ -1,31 +1,53 @@
-// const CastDetail = () => {
-//   const { id } = useParams();
-//   const [movie, setMovie] = useState<IMovie>();
-//   const [isRating, setIsRating] = useState(false);
-//   const [rating, setRating] = useState(0);
-//   const [isLoading, setIsLoading] = useState(false);
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { ICast } from "../interfaces";
+import axiosClient from "../configs/axios";
+import { SyncLoader } from "react-spinners";
+import classNames from "classnames";
 
-//   const { isAuthenticated } = useAuth();
+const CastDetail = () => {
+  const { id } = useParams();
+  const [cast, setCast] = useState<ICast>();
+  const [isLoading, setIsLoading] = useState(false);
 
-//   useEffect(() => {
-//     const fetchMovieDetail = async () => {
-//       try {
-//         setIsLoading(true);
-//         const response = await axiosClient.get(`/movie/${id}`);
+  useEffect(() => {
+    const fetchCastDetail = async () => {
+      try {
+        setIsLoading(true);
+        const response = await axiosClient.get(`/cast/${id}`);
 
-//         const data = await response.data;
-//         setMovie(data.data);
-//       } catch (error) {
-//         console.error("Failed to fetch movie detail:", error);
-//       } finally {
-//         setIsLoading(false);
-//       }
-//     };
+        const data = await response.data;
+        setCast(data.data);
+      } catch (error) {
+        console.error("Failed to fetch movie detail:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-//     fetchMovieDetail();
-//   }, [id]);
+    fetchCastDetail();
+  }, [id]);
 
-//   return <div>CastDetail</div>;
-// };
+  if (!cast)
+    return isLoading ? (
+      <div className="relative">
+        <div
+          className={classNames("h-[600px] flex items-center justify-center")}
+        >
+          <SyncLoader color="#1ed5a9" />
+        </div>
+      </div>
+    ) : (
+      <div className="relative">
+        <div
+          className={classNames("h-[600px] flex items-center justify-center")}
+        >
+          <p>Cast not found</p>
+        </div>
+      </div>
+    );
 
-// export default CastDetail;
+  return <div>CastDetail</div>;
+};
+
+export default CastDetail;

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { IMovie } from "../../interfaces/video";
+import { IMovie } from "../../interfaces";
 import { Container, Typography } from "@mui/material";
 import { FaArrowRight } from "react-icons/fa";
 
@@ -17,7 +17,7 @@ const CastList = ({ movie }: { movie: IMovie }) => {
             <div
               key={actor.id}
               className="flex items-center my-4 flex-col w-40 cursor-pointer"
-              onClick={() => navigate(`/person/${actor.id}`)}
+              onClick={() => navigate(`/person/${actor.credit_id}`)}
             >
               <img
                 src={`https://image.tmdb.org/t/p/w300_and_h450_multi_faces${actor.profile_path}`}

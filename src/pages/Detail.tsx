@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import axiosClient from "../configs/axios";
 import { Container, Divider } from "@mui/material";
 import classNames from "classnames";
-import { IMovie } from "../interfaces/video";
+import { IMovie } from "../interfaces";
 import { FaEye, FaHeart, FaRegStar, FaStar } from "react-icons/fa";
 import { Tooltip } from "react-tooltip";
 import { SyncLoader } from "react-spinners";

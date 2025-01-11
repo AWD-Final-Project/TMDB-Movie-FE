@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axiosClient from "../configs/axios";
-import { IMovie } from "../interfaces/video";
+import { IMovie } from "../interfaces";
 import { SyncLoader } from "react-spinners";
 import classNames from "classnames";
 import { Container } from "@mui/material";
