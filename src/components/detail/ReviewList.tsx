@@ -39,7 +39,9 @@ const ReviewList = ({
           </div>
           <p
             className="cursor-pointer"
-            onClick={() => navigate(`/movie/${movie_id}/reviews`)}
+            onClick={() =>
+              navigate(`/movie/${movie_id}?tmdb_id=${movie_id}/reviews`)
+            }
           >
             See all reviews
           </p>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import axiosClient from "../configs/axios";
 import { Container, Divider } from "@mui/material";
 import classNames from "classnames";
@@ -13,6 +13,8 @@ import ReviewList from "../components/detail/ReviewList";
 
 const Detail = () => {
   const { id } = useParams();
+  const [query] = useSearchParams();
+  const tmdb_id = query.get("tmdb_id");
   const [movie, setMovie] = useState<IMovie>();
   const [isRating, setIsRating] = useState(false);
   const [rating, setRating] = useState(0);
@@ -30,7 +32,16 @@ const Detail = () => {
         setMovie(data.data);
       } catch (error) {
         console.error("Failed to fetch movie detail:", error);
+        const response = await axiosClient.get(`/movie/${tmdb_id}`);
+
+        const data = await response.data;
+        setMovie(data.data);
       } finally {
+        const response = await axiosClient.get(`/user/my-vote-rating/${id}`);
+
+        const data = await response.data.data;
+        setMovie((prev) => prev && { ...prev, rating: data });
+        setRating(data);
         setIsLoading(false);
       }
     };
@@ -179,7 +190,7 @@ const Detail = () => {
                               <div
                                 key={item}
                                 onMouseEnter={() => setRating(item)}
-                                onMouseLeave={() => setRating(0)}
+                                onMouseLeave={() => setRating(movie.rating)}
                                 onClick={() => rateMovie(item)}
                                 className="cursor-pointer px-[2px]"
                               >

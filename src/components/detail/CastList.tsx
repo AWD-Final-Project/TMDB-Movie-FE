@@ -13,11 +13,15 @@ const CastList = ({ movie }: { movie: IMovie }) => {
           <Typography variant="h5">Top Cast</Typography>
         </div>
         <div className="flex gap-5 mb-4 overflow-x-auto">
-          {movie.credits.cast.slice(0, 10).map((actor) => (
+          {movie.credits.cast.slice(0, 10).map((actor, index) => (
             <div
               key={actor.id}
               className="flex items-center my-4 flex-col w-40 cursor-pointer"
-              onClick={() => navigate(`/person/${actor.credit_id}`)}
+              onClick={() =>
+                navigate(
+                  `/person/${actor.credit_id}?tmdb_id=${movie.credits.cast[index].id}`
+                )
+              }
             >
               <img
                 src={`https://image.tmdb.org/t/p/w300_and_h450_multi_faces${actor.profile_path}`}
@@ -37,7 +41,9 @@ const CastList = ({ movie }: { movie: IMovie }) => {
           {movie.credits.cast.length > 10 && (
             <div
               className="flex items-center gap-2 my-4 w-40 cursor-pointer"
-              onClick={() => navigate(`/movie/${movie._id}/cast`)}
+              onClick={() =>
+                navigate(`/movie/${movie._id}?tmdb_id=${movie.tmdb_id}/cast`)
+              }
             >
               <div className="text-nowrap">View More</div>
               <FaArrowRight />

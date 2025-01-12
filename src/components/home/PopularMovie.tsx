@@ -43,7 +43,9 @@ const PopularMovie = () => {
               <div
                 key={movie.id}
                 className="flex items-center my-4 flex-col w-40 cursor-pointer"
-                onClick={() => navigate(`/movie/${movie._id}`)}
+                onClick={() =>
+                  navigate(`/movie/${movie._id}?tmdb_id=${movie.tmdb_id}`)
+                }
               >
                 <img
                   src={`https://image.tmdb.org/t/p/w300_and_h450_multi_faces${movie?.poster_path}`}

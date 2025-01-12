@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { ICast } from "../interfaces";
 import axiosClient from "../configs/axios";
 import { SyncLoader } from "react-spinners";
@@ -8,6 +8,8 @@ import { Container, Divider } from "@mui/material";
 
 const CastDetail = () => {
   const { id } = useParams();
+  const [query] = useSearchParams();
+  const tmdb_id = query.get("tmdb_id");
   const [cast, setCast] = useState<ICast>();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -21,6 +23,10 @@ const CastDetail = () => {
         setCast(data.data);
       } catch (error) {
         console.error("Failed to fetch movie detail:", error);
+        const response = await axiosClient.get(`/cast/${tmdb_id}`);
+
+        const data = await response.data;
+        setCast(data.data);
       } finally {
         setIsLoading(false);
       }
@@ -89,7 +95,7 @@ const CastDetail = () => {
             <div className="mt-8">
               <p className="text-lg font-semibold">Acting</p>
               <div className="shadow mt-2">
-                {cast.movie_credits.cast.map((actor, index) => (
+                {cast.movie_credits?.cast.map((actor, index) => (
                   <>
                     {index > 0 && <Divider />}
                     <div key={actor.id} className="p-4 flex gap-6">
