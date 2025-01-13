@@ -138,6 +138,7 @@ const Profile = () => {
                           variant="outlined"
                           fullWidth
                           name="password"
+                          type="password"
                           value={formData.password}
                           onChange={(e) =>
                             setFormData({
@@ -153,6 +154,7 @@ const Profile = () => {
                           label="Confirm Password"
                           variant="outlined"
                           fullWidth
+                          type="password"
                           name="confirmPassword"
                           value={formData.confirmPassword}
                           onChange={(e) => {
