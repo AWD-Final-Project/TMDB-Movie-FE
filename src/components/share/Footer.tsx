@@ -10,11 +10,13 @@ const Footer = () => {
         <p className="text-white text-lg">
           Advanced Web Application Development - CQ2021/3
         </p>
-        <p className="text-white">Group</p>
+        <p className="text-white">Group Members</p>
         <ul>
+          <li className="text-white text-sm">
+            21120036 - Triệu Hoàng Thiên Ân
+          </li>
+          <li className="text-white text-sm">21120177 - Lê Minh Huy</li>
           <li className="text-white text-sm">21120552 - Nguyễn Đức Nhật Tân</li>
-          <li className="text-white text-sm">21120 - Triệu Hoàng Thiên Ân</li>
-          <li className="text-white text-sm">21120 - Lê Minh Huy</li>
         </ul>
       </div>
     </div>
