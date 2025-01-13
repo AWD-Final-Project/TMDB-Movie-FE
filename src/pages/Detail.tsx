@@ -71,6 +71,7 @@ const Detail = () => {
         value: rate,
         movieId: id,
       });
+      setMovie((prev) => prev && { ...prev, rating: rate });
     } catch (error) {
       console.error("Failed to rate movie:", error);
     } finally {
@@ -196,7 +197,7 @@ const Detail = () => {
                       className="w-10 h-10 rounded-full cursor-pointer bg-black flex items-center justify-center relative"
                       onClick={() => setIsRating(!isRating)}
                     >
-                      <FaStar size={14} />
+                      <FaStar size={14} color={movie?.rating ? "yellow" : ""} />
                       <Tooltip id="rating">{!isRating && "Rate it!"}</Tooltip>
                       {isRating && (
                         <>
