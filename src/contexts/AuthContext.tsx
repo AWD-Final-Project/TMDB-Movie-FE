@@ -6,11 +6,13 @@ export const AuthContext = createContext({
   login: ({
     accessToken,
     refreshToken,
+    user: { id },
   }: {
     accessToken: string;
     refreshToken: string;
+    user: { id: string };
   }) => {
-    console.log(accessToken, refreshToken);
+    console.log(accessToken, refreshToken, id);
   },
   logout: () => {},
 });
@@ -24,12 +26,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const login = ({
     accessToken,
     refreshToken,
+    user: { id },
   }: {
     accessToken: string;
     refreshToken: string;
+    user: { id: string };
   }) => {
     localStorage.setItem("token", accessToken);
     localStorage.setItem("refreshToken", refreshToken);
+    localStorage.setItem("userId", id);
     setToken(accessToken);
     setIsAuthenticated(true);
   };
@@ -38,6 +43,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const logout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("refreshToken");
+    localStorage.removeItem("userId");
     setToken(null);
     setIsAuthenticated(false);
     navigate("/login");

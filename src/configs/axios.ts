@@ -27,7 +27,7 @@ axiosClient.interceptors.response.use(
       if (refreshToken) {
         const newToken = await axios.post(
           `${import.meta.env.VITE_API_URL}/user/invoke-new-tokens`,
-          { refreshToken }
+          { refreshToken, userId: localStorage.getItem("userId") }
         );
 
         localStorage.setItem("token", newToken.data.accessToken);
