@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { ICast } from "../interfaces";
 import axiosClient from "../configs/axios";
 import { SyncLoader } from "react-spinners";
@@ -7,8 +7,7 @@ import classNames from "classnames";
 import { Container, Divider } from "@mui/material";
 
 const CastDetail = () => {
-  const [query] = useSearchParams();
-  const tmdb_id = query.get("tmdb_id");
+  const { id } = useParams();
   const [cast, setCast] = useState<ICast>();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -16,7 +15,7 @@ const CastDetail = () => {
     const fetchCastDetail = async () => {
       try {
         setIsLoading(true);
-        const response = await axiosClient.get(`/cast/${tmdb_id}`);
+        const response = await axiosClient.get(`/cast/${id}`);
 
         const data = await response.data;
         setCast(data.data);
@@ -28,7 +27,7 @@ const CastDetail = () => {
     };
 
     fetchCastDetail();
-  }, []);
+  }, [id]);
 
   if (!cast)
     return isLoading ? (

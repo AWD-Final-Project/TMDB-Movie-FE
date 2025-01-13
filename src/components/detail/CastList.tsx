@@ -13,15 +13,11 @@ const CastList = ({ movie }: { movie: IMovie }) => {
           <Typography variant="h5">Top Cast</Typography>
         </div>
         <div className="flex gap-5 mb-4 overflow-x-auto">
-          {movie.credits.cast.slice(0, 10).map((actor, index) => (
+          {movie.credits.cast.slice(0, 10).map((actor) => (
             <div
               key={actor.id}
               className="flex items-center my-4 flex-col w-40 cursor-pointer"
-              onClick={() =>
-                navigate(
-                  `/person/${actor.credit_id}?tmdb_id=${movie.credits.cast[index].id}`
-                )
-              }
+              onClick={() => navigate(`/person/${actor.id}`)}
             >
               <img
                 src={`https://image.tmdb.org/t/p/w300_and_h450_multi_faces${actor.profile_path}`}
