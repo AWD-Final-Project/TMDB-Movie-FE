@@ -65,8 +65,11 @@ function AIChat() {
         ]);
       } else {
         const { movie, route } = data;
-
-        navigate(route + "?tmdb_id=" + movie.id);
+        if (movie) {
+          navigate(route + "?tmdb_id=" + movie.id);
+        } else {
+          navigate(route);
+        }
       }
     } catch (error) {
       console.error("Error fetching AI response:", error);
