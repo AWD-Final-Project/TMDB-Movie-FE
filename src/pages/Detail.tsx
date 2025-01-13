@@ -10,6 +10,7 @@ import { SyncLoader } from "react-spinners";
 import { useAuth } from "../contexts/AuthContext";
 import CastList from "../components/detail/CastList";
 import ReviewList from "../components/detail/ReviewList";
+import Recommendations from "../components/detail/Recommendations";
 
 const Detail = () => {
   const { id } = useParams();
@@ -19,6 +20,7 @@ const Detail = () => {
   const [isRating, setIsRating] = useState(false);
   const [rating, setRating] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const [recommendations, setRecommendations] = useState();
 
   const { isAuthenticated } = useAuth();
 
@@ -29,6 +31,11 @@ const Detail = () => {
         const response = await axiosClient.get(`/movie/${id}`);
 
         const data = await response.data;
+
+        const rcm = await axiosClient.get(`/movie/${id}/recommendations`);
+
+        const recommendations = await rcm.data.data;
+        setRecommendations(recommendations);
         setMovie(data.data);
       } catch (error) {
         console.error("Failed to fetch movie detail:", error);
@@ -36,12 +43,21 @@ const Detail = () => {
 
         const data = await response.data;
         setMovie(data.data);
-      } finally {
-        const response = await axiosClient.get(`/user/my-vote-rating/${id}`);
 
-        const data = await response.data.data;
-        setMovie((prev) => prev && { ...prev, rating: data });
-        setRating(data);
+        const rcm = await axiosClient.get(`/movie/${id}/recommendations`);
+
+        const recommendations = await rcm.data.data;
+        setRecommendations(recommendations);
+      } finally {
+        try {
+          const response = await axiosClient.get(`/user/my-vote-rating/${id}`);
+
+          const data = await response.data.data;
+          setMovie((prev) => prev && { ...prev, rating: data });
+          setRating(data);
+        } catch (error) {
+          console.error("Failed to fetch movie detail:", error);
+        }
         setIsLoading(false);
       }
     };
@@ -222,6 +238,10 @@ const Detail = () => {
         <Divider />
         <ReviewList reviews={movie?.reviews} movie_id={id as string} />
         <Divider />
+        <Recommendations
+          genre={recommendations?.genreRecommendations}
+          similar={recommendations?.similarMovies}
+        />
       </Container>
     </div>
   );

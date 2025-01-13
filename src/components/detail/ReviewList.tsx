@@ -13,9 +13,9 @@ const ReviewList = ({
   return (
     <div className="my-4">
       <p className="text-lg font-semibold">
-        Reviews <span className="text-gray-500">{reviews.length}</span>
+        Reviews <span className="text-gray-500">{reviews?.length || 0}</span>
       </p>
-      {reviews.length > 0 && (
+      {reviews?.length && reviews.length > 0 && (
         <div className="">
           <div key={reviews[0]._id} className="my-4 rounded-lg shadow p-4">
             <div className="flex">

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import axiosClient from "../configs/axios";
 import { IMovie } from "../interfaces";
 import { SyncLoader } from "react-spinners";
@@ -9,6 +9,9 @@ import { FaArrowLeft } from "react-icons/fa";
 
 const CastPage = () => {
   const { id } = useParams();
+  const [query] = useSearchParams();
+  const tmdb_id = query.get("tmdb_id");
+
   const [isLoading, setIsLoading] = useState(false);
   const [movie, setMovie] = useState<IMovie>();
 
@@ -21,6 +24,11 @@ const CastPage = () => {
         const data = await response.data;
         setMovie(data.data);
       } catch (error) {
+        const response = await axiosClient.get(`/movie/${tmdb_id}`);
+
+        const data = await response.data;
+        setMovie(data.data);
+
         console.error("Failed to fetch movie detail:", error);
       } finally {
         setIsLoading(false);

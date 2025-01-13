@@ -5,6 +5,7 @@ import { Container, MenuItem, Select } from "@mui/material";
 import classNames from "classnames";
 import { SyncLoader } from "react-spinners";
 import { IMovie } from "../interfaces";
+import { useAuth } from "../contexts/AuthContext";
 
 const Search = () => {
   const navigate = useNavigate();
@@ -16,12 +17,15 @@ const Search = () => {
   const [searchQuery, setSearchQuery] = useState(query || "");
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     const searchMovie = async () => {
       try {
         setLoading(true);
-        let queryString = `/movie/search?key_word=${query}&page=${page}`;
+        let queryString = isAuthenticated
+          ? `/ai/search?key_word=${query}&page=${page}`
+          : `/movie/search?key_word=${query}&page=${page}`;
         if (language !== "all") {
           queryString += `&language=${language}`;
         }
