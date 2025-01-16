@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import { IMovie } from "../interfaces";
 import axiosClient from "../configs/axios";
 import { SyncLoader } from "react-spinners";
 import classNames from "classnames";
-import { Container } from "@mui/material";
+import { Button, Container, Modal } from "@mui/material";
 import { FaArrowLeft } from "react-icons/fa";
 
 const ReviewPage = () => {
   const { id } = useParams();
+  const [query] = useSearchParams();
+  const tmdb_id = query.get("tmdbId");
   const [isLoading, setIsLoading] = useState(false);
   const [movie, setMovie] = useState<IMovie>();
+  const [reviewModal, setReviewModal] = useState(false);
 
   useEffect(() => {
     const fetchMovieDetail = async () => {
@@ -21,6 +24,10 @@ const ReviewPage = () => {
         const data = await response.data;
         setMovie(data.data);
       } catch (error) {
+        const response = await axiosClient.get(`/movie/${tmdb_id}`);
+
+        const data = await response.data;
+        setMovie(data.data);
         console.error("Failed to fetch movie detail:", error);
       } finally {
         setIsLoading(false);
@@ -80,30 +87,83 @@ const ReviewPage = () => {
       </div>
       <div className="">
         <Container className="py-5 flex gap-10">
-          {movie.reviews.map((review) => (
-            <div className="">
-              <div key={review._id} className="my-4 rounded-lg shadow p-4">
-                <div className="flex">
-                  <img
-                    src={
-                      "https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces/" +
-                      review.author_details.avatar_path
-                    }
-                    className="w-12 h-12 rounded-full object-cover"
-                    alt=""
-                  />
-                  <div className="ml-4">
-                    <p className="text-lg font-semibold">
-                      A review by {review.author}
-                    </p>
-                  </div>
+          <div className="">
+            <Button
+              variant="contained"
+              className="bg-[#1ed5a9] uppercase font-semibold whitespace-nowrap rounded-full"
+              onClick={() => setReviewModal(true)}
+            >
+              Write review
+            </Button>
+            <Modal open={reviewModal} onClose={() => setReviewModal(false)}>
+              <div className="fixed inset-0 flex items-center justify-center z-50">
+                <div className="bg-white px-8 py-4 min-w-[600px] rounded-lg shadow-lg">
+                  <h2 className="text-2xl font-semibold mb-4">
+                    Write a review
+                  </h2>
+                  <form
+                    onSubmit={async (e) => {
+                      e.preventDefault();
+
+                      await axiosClient.post(`/user/add-review`, {
+                        movieId: movie._id,
+                        content: e.target[0].value,
+                      });
+                      setReviewModal(false);
+                    }}
+                  >
+                    <div className="mb-4">
+                      <label
+                        htmlFor="content"
+                        className="block text-sm font-medium text-gray-700"
+                      >
+                        Content
+                      </label>
+                      <textarea
+                        id="content"
+                        className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                        rows={4}
+                      ></textarea>
+                    </div>
+                    <div className="flex justify-end">
+                      <button
+                        type="submit"
+                        className="bg-[#1ed5a9] text-white px-4 py-2 rounded-md"
+                      >
+                        Submit
+                      </button>
+                    </div>
+                  </form>
                 </div>
-                <p className="mt-4 h-[100px] overflow-hidden text-ellipsis line-clamp-4">
-                  {review.content}
-                </p>
               </div>
-            </div>
-          ))}
+            </Modal>
+          </div>
+          <div className="flex flex-col gap-4">
+            {movie.reviews.map((review) => (
+              <div className="">
+                <div key={review._id} className=" rounded-lg shadow p-4">
+                  <div className="flex">
+                    <img
+                      src={
+                        "https://media.themoviedb.org/t/p/w1920_and_h800_multi_faces/" +
+                        review.author_details.avatar_path
+                      }
+                      className="w-12 h-12 rounded-full object-cover"
+                      alt=""
+                    />
+                    <div className="ml-4">
+                      <p className="text-lg font-semibold">
+                        A review by {review.author}
+                      </p>
+                    </div>
+                  </div>
+                  <p className="mt-4 h-[100px] overflow-hidden text-ellipsis line-clamp-4">
+                    {review.content}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
         </Container>
       </div>
     </div>

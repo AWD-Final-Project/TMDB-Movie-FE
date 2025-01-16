@@ -4,9 +4,11 @@ import { IReview } from "../../interfaces";
 const ReviewList = ({
   reviews,
   movie_id,
+  tmdb_id,
 }: {
   reviews: IReview[];
   movie_id: string;
+  tmdb_id: string;
 }) => {
   const navigate = useNavigate();
 
@@ -40,7 +42,7 @@ const ReviewList = ({
           <p
             className="cursor-pointer"
             onClick={() =>
-              navigate(`/movie/${movie_id}?tmdb_id=${movie_id}/reviews`)
+              navigate(`/movie/${movie_id}/reviews?tmdbId=${tmdb_id}`)
             }
           >
             See all reviews

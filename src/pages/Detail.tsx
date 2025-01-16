@@ -237,11 +237,15 @@ const Detail = () => {
       <CastList movie={movie} />
       <Container>
         <Divider />
-        <ReviewList reviews={movie?.reviews} movie_id={id as string} />
+        <ReviewList
+          reviews={movie?.reviews}
+          movie_id={id as string}
+          tmdb_id={tmdb_id as string}
+        />
         <Divider />
         <Recommendations
           genre={recommendations?.genreRecommendations}
-          similar={recommendations?.similarMovies}
+          similar={recommendations?.similarRecommendations}
         />
       </Container>
     </div>
