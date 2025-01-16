@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { IMovie } from "../interfaces";
 import axiosClient from "../configs/axios";
-import { SyncLoader } from "react-spinners";
+import { CircleLoader, SyncLoader } from "react-spinners";
 import classNames from "classnames";
 import { Button, Container, Modal } from "@mui/material";
 import { FaArrowLeft } from "react-icons/fa";
@@ -14,6 +14,7 @@ const ReviewPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [movie, setMovie] = useState<IMovie>();
   const [reviewModal, setReviewModal] = useState(false);
+  const [isReviewLoading, setIsReviewLoading] = useState(false);
 
   const fetchMovieDetail = async () => {
     try {
@@ -104,11 +105,12 @@ const ReviewPage = () => {
                   <form
                     onSubmit={async (e) => {
                       e.preventDefault();
-
+                      setIsReviewLoading(true);
                       await axiosClient.post(`/user/add-review`, {
-                        movieId: movie._id,
+                        movieId: movie.tmdb_id,
                         content: e.target[0].value,
                       });
+                      setIsReviewLoading(false);
                       setReviewModal(false);
                       fetchMovieDetail();
                     }}
@@ -131,7 +133,7 @@ const ReviewPage = () => {
                         type="submit"
                         className="bg-[#1ed5a9] text-white px-4 py-2 rounded-md"
                       >
-                        Submit
+                        {isReviewLoading ? <CircleLoader /> : "Submit"}
                       </button>
                     </div>
                   </form>
