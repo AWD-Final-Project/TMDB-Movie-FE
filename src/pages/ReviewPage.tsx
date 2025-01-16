@@ -15,25 +15,25 @@ const ReviewPage = () => {
   const [movie, setMovie] = useState<IMovie>();
   const [reviewModal, setReviewModal] = useState(false);
 
+  const fetchMovieDetail = async () => {
+    try {
+      setIsLoading(true);
+      const response = await axiosClient.get(`/movie/${id}`);
+
+      const data = await response.data;
+      setMovie(data.data);
+    } catch (error) {
+      const response = await axiosClient.get(`/movie/${tmdb_id}`);
+
+      const data = await response.data;
+      setMovie(data.data);
+      console.error("Failed to fetch movie detail:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   useEffect(() => {
-    const fetchMovieDetail = async () => {
-      try {
-        setIsLoading(true);
-        const response = await axiosClient.get(`/movie/${id}`);
-
-        const data = await response.data;
-        setMovie(data.data);
-      } catch (error) {
-        const response = await axiosClient.get(`/movie/${tmdb_id}`);
-
-        const data = await response.data;
-        setMovie(data.data);
-        console.error("Failed to fetch movie detail:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
     fetchMovieDetail();
   }, [id]);
 
@@ -110,6 +110,7 @@ const ReviewPage = () => {
                         content: e.target[0].value,
                       });
                       setReviewModal(false);
+                      fetchMovieDetail();
                     }}
                   >
                     <div className="mb-4">
