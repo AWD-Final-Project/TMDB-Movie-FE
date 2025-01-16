@@ -50,7 +50,9 @@ const Detail = () => {
         setRecommendations(recommendations);
       } finally {
         try {
-          const response = await axiosClient.get(`/user/my-vote-rating/${id}`);
+          const response = await axiosClient.get(
+            `/user/my-vote-rating/${tmdb_id}`
+          );
 
           const data = await response.data.data;
           setMovie((prev) => prev && { ...prev, rating: data });
@@ -69,7 +71,7 @@ const Detail = () => {
     try {
       await axiosClient.post(`/user/vote-rating`, {
         value: rate,
-        movieId: id,
+        movieId: tmdb_id,
       });
       setMovie((prev) => prev && { ...prev, rating: rate });
     } catch (error) {
@@ -83,12 +85,12 @@ const Detail = () => {
     try {
       if (movie?.is_favorite) {
         await axiosClient.delete(`/user/remove-from-favorite`, {
-          data: { movieId: id },
+          data: { movieId: tmdb_id },
         });
         setMovie((prev) => prev && { ...prev, is_favorite: false });
       } else {
         await axiosClient.post(`/user/add-to-favorite`, {
-          movieId: id,
+          movieId: tmdb_id,
         });
         setMovie((prev) => prev && { ...prev, is_favorite: true });
       }
@@ -101,12 +103,12 @@ const Detail = () => {
     try {
       if (movie?.is_watchlist) {
         await axiosClient.delete(`/user/remove-from-watchlist`, {
-          data: { movieId: id },
+          data: { movieId: tmdb_id },
         });
         setMovie((prev) => prev && { ...prev, is_watchlist: false });
       } else {
         await axiosClient.post(`/user/add-to-watchlist`, {
-          movieId: id,
+          movieId: tmdb_id,
         });
         setMovie((prev) => prev && { ...prev, is_watchlist: true });
       }
